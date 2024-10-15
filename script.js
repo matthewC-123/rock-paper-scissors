@@ -1,44 +1,69 @@
 function getComputerChoice() {
-  choices = ["rock", "paper", "scissors"];
-  const randomIndex = Math.floor(Math.random() * 3);
+  const choices = ["rock", "paper", "scissors"];
+  const randomIndex = Math.floor(Math.random() * choices.length);
   return choices[randomIndex];
 }
 
 function getHumanChoice() {
-  const validChoices = ["rock", "paper", "scissors"];
-  let userChoice = prompt(
-    "Enter your choice (rock, paper, or scissors):"
-  ).toLowerCase();
-
-  if (!validChoices.includes(userChoice)) {
-    alert("Invalid choice! Please enter 'rock', 'paper', or 'scissors'.");
-  } else {
-    alert("You chose: " + userChoice);
+  const choices = ["rock", "paper", "scissors"];
+  let userChoice = prompt("Enter rock, paper, or scissors:")
+    .toLowerCase()
+    .trim();
+  while (!choices.includes(userChoice)) {
+    userChoice = prompt("Invalid. Enter rock, paper or scissors:")
+      .toLowerCase()
+      .trim();
   }
   return userChoice;
 }
 
 function playRound(humanChoice, computerChoice) {
-  // Determine the winner and increment the score
+  humanChoice = getHumanChoice().toLowerCase().trim();
+  computerChoice = getComputerChoice();
   if (humanChoice === computerChoice) {
-    console.log("It's a tie!");
+    console.log(`It's a tie! Both chose ${humanChoice}`);
   } else if (
     (humanChoice === "rock" && computerChoice === "scissors") ||
-    (humanChoice === "scissors" && computerChoice === "paper") ||
-    (humanChoice === "paper" && computerChoice === "rock")
+    (humanChoice === "paper" && computerChoice === "rock") ||
+    (humanChoice === "scissors" && computerChoice === "paper")
   ) {
+    console.log(
+      `You win! ${
+        humanChoice.charAt(0).toUpperCase() + humanChoice.slice(1)
+      } beats ${
+        computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)
+      }`
+    );
     humanScore++;
-    console.log(`You win! ${humanChoice} beats ${computerChoice}.`);
   } else {
+    console.log(
+      `You lose! ${
+        computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)
+      } beats ${humanChoice.charAt(0).toUpperCase() + humanChoice.slice(1)}`
+    );
     computerScore++;
-    console.log(`You lose! ${computerChoice} beats ${humanChoice}.`);
   }
 }
 
-// Global scope variables
-let humanScore = 0;
-let computerScore = 0;
-const humanSelection = getHumanChoice();
-const computerSelection = getComputerChoice();
+function playGame() {
+  for (let index = 0; index < 5; index++) {
+    const humanChoice = getHumanChoice();
+    const computerChoice = getComputerChoice();
+    playRound(humanChoice, computerChoice);
+  }
+  if (humanScore > computerScore) {
+    console.log("Winner!");
+  } else if (computerScore > humanScore) {
+    console.log("Loser!");
+  } else {
+    console.log("Tie!");
+  }
+  console.log(`Human: ${humanScore}`);
+  console.log(`Computer: ${computerScore}`);
+}
 
-playRound(humanSelection, computerSelection);
+let humanScore = 0;
+
+let computerScore = 0;
+
+playGame();
